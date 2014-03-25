@@ -1,0 +1,103 @@
+<!doctype html>{% load staticfiles %}
+<html lang="en" data-framework="backbonejs">
+	<head>
+		<meta charset="utf-8">
+		<title>Backbone.js • TodoMVC</title>
+		<link rel="stylesheet" href="{% static 'bower_components/todomvc-common/base.css' %}">
+	</head>
+	<body>
+		<section id="todoapp">
+			<header id="header">
+				<h1>todos</h1>
+				<input id="new-todo" placeholder="What needs to be done?" autofocus>
+			</header>
+			<section id="main">
+				<input id="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul id="todo-list"></ul>
+			</section>
+			<footer id="footer"></footer>
+		</section>
+		<footer id="info">
+			<p>Double-click to edit a todo</p>
+			<p>Written by <a href="https://github.com/addyosmani">Addy Osmani</a></p>
+			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
+		<script type="text/template" id="item-template">
+			<div class="view">
+				<input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %>>
+				<label><%- title %></label>
+				<button class="destroy"></button>
+			</div>
+			<input class="edit" value="<%- title %>">
+		</script>
+		<script type="text/template" id="stats-template">
+			<span id="todo-count"><strong><%= remaining %></strong> <%= remaining === 1 ? 'item' : 'items' %> left</span>
+			<ul id="filters">
+				<li>
+					<a class="selected" href="#/">All</a>
+				</li>
+				<li>
+					<a href="#/active">Active</a>
+				</li>
+				<li>
+					<a href="#/completed">Completed</a>
+				</li>
+			</ul>
+			<% if (completed) { %>
+			<button id="clear-completed">Clear completed (<%= completed %>)</button>
+			<% } %>
+		</script>
+
+		<script src="{% static 'bower_components/todomvc-common/base.js' %}"></script>
+		<script src="{% static 'bower_components/jquery/jquery.js' %}"></script>
+		<script src="{% static 'bower_components/jquery-cookie/jquery.cookie.js' %}"></script>
+		<script src="{% static 'bower_components/underscore/underscore.js' %}"></script>
+		<script src="{% static 'bower_components/backbone/backbone.js' %}"></script>
+
+		<script>
+			function csrfSafeMethod(method) {
+			    // these HTTP methods do not require CSRF protection
+			    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+			}
+			function sameOrigin(url) {
+			    // test that a given url is a same-origin URL
+			    // url could be relative or scheme relative or absolute
+			    var host = document.location.host; // host + port
+			    var protocol = document.location.protocol;
+			    var sr_origin = '//' + host;
+			    var origin = protocol + sr_origin;
+			    // Allow absolute or scheme relative URLs to same origin
+			    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+			        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+			        // or any other URL that isn't scheme relative or absolute i.e relative.
+			        !(/^(\/\/|http:|https:).*/.test(url));
+			}
+			$.ajaxSetup({
+			    beforeSend: function(xhr, settings) {
+			        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+			            // Send the token to same-origin, relative URLs only.
+			            // Send the token only if the method warrants CSRF protection
+			            // Using the CSRFToken value acquired earlier
+
+			            // Show request information
+			            console.info( settings.type + ' ' + settings.url );
+
+			            // Get CSRFToken cookie
+			            var csrftoken = $.cookie( 'csrftoken' );
+			            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			        }
+			    }
+			});
+		</script>
+		<!--
+		<script src="{% static 'bower_components/backbone.localStorage/backbone.localStorage.js' %}"></script>-->
+
+		<script src="{% static 'js/models/todo.js' %}"></script>
+		<script src="{% static 'js/collections/todos.js' %}"></script>
+		<script src="{% static 'js/views/todo-view.js' %}"></script>
+		<script src="{% static 'js/views/app-view.js' %}"></script>
+		<script src="{% static 'js/routers/router.js' %}"></script>
+		<script src="{% static 'js/app.js' %}"></script>
+	</body>
+</html>

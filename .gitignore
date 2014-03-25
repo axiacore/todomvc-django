@@ -1,0 +1,7 @@
+*.log
+*.pot
+*.pyc
+local_settings.py
+
+# Ignore database
+db.sqlite3
