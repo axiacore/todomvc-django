@@ -13,7 +13,7 @@ Getting the app to run is pretty easy, just clone the repo, install requirements
 
 ```bash
 # Clone the repo
-$ git clone https://github.com/PabloVallejo/todomvc-rest-framework
+$ git clone https://github.com/AxiaCore/todomvc-django.git
 
 # Install requirements
 $ pip install -U -r requirements.txt
